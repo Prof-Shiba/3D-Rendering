@@ -1,2 +1,2 @@
 # 3D-Rendering
-3D graphics engine
+CPU based 3D graphics engine
