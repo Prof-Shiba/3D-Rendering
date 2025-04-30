@@ -28,18 +28,18 @@ bool init_window(void) {
       SDL_CreateWindow("3D Renderer", SDL_WINDOWPOS_CENTERED,
                        SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
   if (!window) {
-    fprintf(stderr, "SDL window failed to initialize!");
+    fprintf(stderr, "SDL window failed to initialize!\n");
     return false;
   }
 
   renderer = SDL_CreateRenderer(window, DEFAULT_MONITOR_NUMBER, 0);
   if (!renderer) {
-    fprintf(stderr, "SDL renderer failed to initialize!");
+    fprintf(stderr, "SDL renderer failed to initialize!\n");
     return false;
   }
 
   if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) != 0) {
-    fprintf(stderr, "SDL failed to make the window fullscreen!");
+    fprintf(stderr, "SDL failed to make the window fullscreen!\n");
     return false;
   }
 
