@@ -38,6 +38,11 @@ bool init_window(void) {
     return false;
   }
 
+  if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) != 0) {
+    fprintf(stderr, "SDL failed to make the window fullscreen!");
+    return false;
+  }
+
   return true;
 }
 
