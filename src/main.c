@@ -9,8 +9,8 @@
 
 bool is_running = false;
 
-uint16_t WINDOW_WIDTH = 2560;
-uint16_t WINDOW_HEIGHT = 1440;
+uint16_t WINDOW_WIDTH = 0;
+uint16_t WINDOW_HEIGHT = 0;
 
 uint32_t *color_buffer = NULL;
 SDL_Texture *color_buffer_texture = NULL;
@@ -23,6 +23,12 @@ bool init_window(void) {
     fprintf(stderr, "SDL failed to initialize!\n");
     return false;
   }
+
+  SDL_DisplayMode display_mode;
+  SDL_GetCurrentDisplayMode(0, &display_mode); // 0 is main monitor
+
+  WINDOW_WIDTH = display_mode.w;
+  WINDOW_HEIGHT = display_mode.h;
 
   window =
       SDL_CreateWindow("3D Renderer", SDL_WINDOWPOS_CENTERED,
@@ -42,6 +48,7 @@ bool init_window(void) {
     fprintf(stderr, "SDL failed to make the window fullscreen!\n");
     return false;
   }
+  SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
   return true;
 }
