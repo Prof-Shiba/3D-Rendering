@@ -58,11 +58,18 @@ void draw_grid(void) {
   }
 }
 
-void draw_rectangle(uint32_t x, uint32_t y, uint16_t width, uint16_t height,
+void draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
+  if (x >= 0 && x < WINDOW_WIDTH && y >= 0 && y < WINDOW_HEIGHT)
+    color_buffer[(WINDOW_WIDTH * y) + x] = color;
+}
+
+void draw_rectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
                     uint32_t color) {
   for (size_t row = 0; row < height; row++) {
     for (size_t col = 0; col < width; col++) {
-      color_buffer[(WINDOW_WIDTH * row + x) + col + y * y] = color;
+      uint32_t new_x = x + row;
+      uint32_t new_y = y + col;
+      draw_pixel(new_x, new_y, color);
     }
   }
 }
