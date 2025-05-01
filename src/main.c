@@ -90,6 +90,18 @@ void render_color_buffer(void) {
   SDL_RenderCopy(renderer, color_buffer_texture, NULL, NULL);
 }
 
+void draw_grid(void) {
+  for (size_t row = 0; row < WINDOW_HEIGHT; row += 10) {
+    for (size_t col = 0; col < WINDOW_WIDTH; col += 10)
+      color_buffer[(WINDOW_WIDTH * row) + col] = 0xFF555555;
+  }
+}
+
+void draw_rectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
+                    uint32_t color) {
+  // TODO:
+}
+
 void clear_color_buffer(uint32_t color) {
   for (size_t row = 0; row < WINDOW_HEIGHT; row++) {
     for (size_t col = 0; col < WINDOW_WIDTH; col++) {
@@ -103,7 +115,9 @@ void render(void) {
   SDL_RenderClear(renderer);
 
   render_color_buffer();
-  clear_color_buffer(0xFFFFFF00);
+  clear_color_buffer(0xFF000000);
+  draw_grid();
+  draw_rectangle(500, 500, 200, 200, 0xFFFF0000);
 
   // double buffer
   SDL_RenderPresent(renderer);
