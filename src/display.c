@@ -67,7 +67,7 @@ void draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
 void draw_grid(void) {
   for (size_t row = 0; row < WINDOW_HEIGHT; row += 10) {
     for (size_t col = 0; col < WINDOW_WIDTH; col += 10)
-      color_buffer[(WINDOW_WIDTH * row) + col] = 0xFF555555;
+      color_buffer[(WINDOW_WIDTH * row) + col] = 0xFF333333;
   }
 }
 
