@@ -6,10 +6,11 @@
 #define NUM_OF_POINTS (9 * 9 * 9)
 
 bool is_running = false;
-float fov_factor = 128;
+float fov_factor = 128; // our scalar
 
 vec3_t cube_points[NUM_OF_POINTS];
 vec2_t projected_points[NUM_OF_POINTS];
+
 void setup(void) {
   color_buffer =
       (uint32_t *)malloc(sizeof(uint32_t) * WINDOW_WIDTH * WINDOW_HEIGHT);
