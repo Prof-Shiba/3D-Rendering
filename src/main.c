@@ -1,6 +1,8 @@
 #include "./display.h"
 #include "./vector.h"
 
+// NOTE: cube will go from -1 to 1, 0 is in the center, need 9 points to
+// represent that, inc by .25
 #define NUM_OF_POINTS (9 * 9 * 9)
 
 bool is_running = false;
