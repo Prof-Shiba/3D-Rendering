@@ -3,6 +3,8 @@
 #include <stdbool.h>
 
 #define DEFAULT_MONITOR_NUMBER -1
+#define TARGET_FPS 60
+#define FRAME_TARGET_TIME (1000 / TARGET_FPS)
 
 extern uint16_t WINDOW_WIDTH;
 extern uint16_t WINDOW_HEIGHT;
