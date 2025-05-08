@@ -1,4 +1,5 @@
 #include "./display.h"
+#include <stdlib.h>
 
 uint16_t WINDOW_WIDTH = 0;
 uint16_t WINDOW_HEIGHT = 0;
@@ -62,6 +63,27 @@ void render_color_buffer(void) {
 void draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
   if (x >= 0 && x < WINDOW_WIDTH && y >= 0 && y < WINDOW_HEIGHT)
     color_buffer[(WINDOW_WIDTH * y) + x] = color;
+}
+
+void draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
+               uint32_t color) {
+  int16_t delta_x = (x1 - x0);
+  int16_t delta_y = (y1 - y0);
+
+  uint16_t longest_side_length =
+      (abs(delta_x) >= abs(delta_y)) ? abs(delta_x) : abs(delta_y);
+
+  float x_inc = delta_x / (float)longest_side_length;
+  float y_inc = delta_y / (float)longest_side_length;
+
+  float current_x = x0;
+  float current_y = y0;
+
+  for (size_t i = 0; i <= longest_side_length; i++) {
+    draw_pixel(round(current_x), round(current_y), color);
+    current_x += x_inc;
+    current_y += y_inc;
+  }
 }
 
 void draw_grid(void) {

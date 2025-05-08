@@ -21,7 +21,9 @@ void destroy_window(void);
 void render_color_buffer(void);
 void clear_color_buffer(uint32_t color);
 
-void draw_grid(void);
 void draw_pixel(uint16_t x, uint16_t y, uint32_t color);
+void draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
+               uint32_t color);
+void draw_grid(void);
 void draw_rectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
                     uint32_t color);
