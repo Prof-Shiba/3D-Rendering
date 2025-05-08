@@ -104,6 +104,13 @@ void draw_rectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
   }
 }
 
+void draw_triangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
+                   uint16_t x2, uint16_t y2, uint32_t color) {
+  draw_line(x0, y0, x1, y1, color);
+  draw_line(x1, y1, x2, y2, color);
+  draw_line(x2, y2, x0, y0, color);
+}
+
 void destroy_window(void) {
   free(color_buffer);
   SDL_DestroyWindow(window);
