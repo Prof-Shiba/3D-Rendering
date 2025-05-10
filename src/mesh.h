@@ -11,6 +11,7 @@ extern face_t cube_faces[NUM_CUBE_FACES];
 typedef struct {
   vec3_t *vertices;
   face_t *faces;
+  vec3_t rotation;
 } mesh_t;
 
 extern mesh_t mesh;
