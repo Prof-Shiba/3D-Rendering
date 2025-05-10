@@ -1,10 +1,10 @@
 #include "./mesh.h"
 
-vec3_t mesh_vertices[NUM_MESH_VERTICES] = {
+vec3_t cube_vertices[NUM_CUBE_VERTICES] = {
     {-1, -1, -1}, {-1, 1, -1}, {1, 1, -1}, {1, -1, -1},
     {1, 1, 1},    {1, -1, 1},  {-1, 1, 1}, {-1, -1, 1}};
 
-face_t mesh_faces[NUM_MESH_FACES] = {
+face_t cube_faces[NUM_CUBE_FACES] = {
     // front
     {1, 2, 3},
     {1, 3, 4},
