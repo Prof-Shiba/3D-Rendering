@@ -1,4 +1,8 @@
 #include "./mesh.h"
+#include "array.h"
+#include <wchar.h>
+
+mesh_t mesh = {.vertices = NULL, .faces = NULL, .rotation = {0, 0, 0}};
 
 vec3_t cube_vertices[NUM_CUBE_VERTICES] = {
     {-1, -1, -1}, {-1, 1, -1}, {1, 1, -1}, {1, -1, -1},
@@ -23,3 +27,15 @@ face_t cube_faces[NUM_CUBE_FACES] = {
     // bottom
     {6, 8, 1},
     {6, 1, 4}};
+
+void load_cube_mesh_data(void) {
+  for (uint32_t i = 0; i < NUM_CUBE_VERTICES; i++) {
+    vec3_t cube_vertex = cube_vertices[i];
+    array_push(mesh.vertices, cube_vertex);
+  }
+
+  for (uint32_t i = 0; i < NUM_CUBE_FACES; i++) {
+    face_t cube_face = cube_faces[i];
+    array_push(mesh.faces, cube_face);
+  }
+}

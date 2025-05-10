@@ -14,4 +14,5 @@ typedef struct {
   vec3_t rotation;
 } mesh_t;
 
+extern void load_cube_mesh_data(void);
 extern mesh_t mesh;
