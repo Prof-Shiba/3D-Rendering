@@ -1,11 +1,11 @@
+#include "./array.h"
 #include "./display.h"
 #include "./mesh.h"
 #include "./vector.h"
 
 bool is_running = false;
-
 float fov_factor = 900; // our scalar
-triangle_t triangles_to_render[NUM_MESH_FACES];
+triangle_t *triangles_to_render = NULL;
 
 uint32_t previous_frame_time = 0;
 uint32_t time_to_wait = 0;
@@ -54,6 +54,8 @@ void update(void) {
 
   previous_frame_time = SDL_GetTicks();
 
+  triangles_to_render = NULL;
+
   cube_rotation.x += 0.01;
   cube_rotation.y += 0.01;
   cube_rotation.z += 0.01;
@@ -68,30 +70,38 @@ void update(void) {
 
     triangle_t projected_triangle;
 
+    // loop all three vertices of the current face and transform them
     for (size_t j = 0; j < 3; j++) {
       vec3_t transformed_vertex = face_vertices[j];
       transformed_vertex = vec3_rotate_x(transformed_vertex, cube_rotation.x);
       transformed_vertex = vec3_rotate_y(transformed_vertex, cube_rotation.y);
       transformed_vertex = vec3_rotate_z(transformed_vertex, cube_rotation.z);
 
+      // translate vertex away from cam
       transformed_vertex.z -= camera_pos.z;
 
+      // project current vertex
       vec2_t projected_point = project(transformed_vertex);
 
+      // scale and translate projected points to middle of screen
       projected_point.x += (uint16_t)(WINDOW_WIDTH / 2);
       projected_point.y += (uint16_t)(WINDOW_HEIGHT / 2);
 
       projected_triangle.points[j] = projected_point;
     }
 
-    triangles_to_render[i] = projected_triangle;
+    // save the projected triangle in the array of triangles to render
+    array_push(triangles_to_render, projected_triangle);
   }
 }
 
 void render(void) {
   draw_grid();
 
-  for (size_t i = 0; i < NUM_MESH_FACES; i++) {
+  // loop all projected triangles and render them
+  uint32_t num_of_triangles = array_length(triangles_to_render);
+
+  for (size_t i = 0; i < num_of_triangles; i++) {
     triangle_t current_triangle = triangles_to_render[i];
 
     // vertex points
@@ -107,6 +117,10 @@ void render(void) {
                   current_triangle.points[2].x, current_triangle.points[2].y,
                   0xFF00FF00);
   }
+
+  // clear array since its redone every frame
+  // NOTE: change soon 2025-05-10
+  array_free(triangles_to_render);
 
   render_color_buffer();
   clear_color_buffer(0xFF000000);
