@@ -39,3 +39,8 @@ void load_cube_mesh_data(void) {
     array_push(mesh.faces, cube_face);
   }
 }
+
+void load_obj_data(char *file_name) {
+  // TODO: Load vertices and faces in
+  // mesh.vertices and mesh.faces
+}

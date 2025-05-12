@@ -19,7 +19,8 @@ void setup(void) {
   color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
-  load_cube_mesh_data();
+  // load_cube_mesh_data();
+  load_obj_data("./assets/cube.obj");
 }
 
 vec2_t project(vec3_t point) {
