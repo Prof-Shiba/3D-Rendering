@@ -19,8 +19,7 @@ void setup(void) {
   color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
-  // load_cube_mesh_data();
-  load_obj_data("./assets/cube.obj");
+  load_obj_data("./assets/f22.obj");
 }
 
 vec2_t project(vec3_t point) {
@@ -58,8 +57,8 @@ void update(void) {
   triangles_to_render = NULL;
 
   mesh.rotation.x += 0.01;
-  mesh.rotation.y += 0.01;
-  mesh.rotation.z += 0.01;
+  mesh.rotation.y += 0.00;
+  mesh.rotation.z += 0.00;
 
   uint32_t num_faces = array_length(mesh.faces);
 
