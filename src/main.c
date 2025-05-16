@@ -53,8 +53,8 @@ void update(void) {
   triangles_to_render = NULL;
 
   mesh.rotation.x += 0.01;
-  mesh.rotation.y += 0.00;
-  mesh.rotation.z += 0.00;
+  mesh.rotation.y += 0.01;
+  mesh.rotation.z += 0.01;
 
   uint32_t num_faces = array_length(mesh.faces);
 
@@ -87,8 +87,13 @@ void update(void) {
 
     vec3_t vector_ab = vec3_sub(vector_b, vector_a);
     vec3_t vector_ac = vec3_sub(vector_c, vector_a);
+    vec3_normalize(&vector_ab);
+    vec3_normalize(&vector_ac);
 
     vec3_t normal = vec3_cross(vector_ab, vector_ac);
+    // NOTE: it's normal to normalize the normal vector. perfectly normal.
+    vec3_normalize(&normal);
+
     vec3_t camera_ray = vec3_sub(camera_pos, vector_a);
 
     // check if dot product is negative (out of view)
