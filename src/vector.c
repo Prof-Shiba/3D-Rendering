@@ -13,6 +13,16 @@ vec2_t vec2_sub(vec2_t a, vec2_t b) {
   return new_vec;
 }
 
+vec2_t vec2_mul(vec2_t v, float scalar) {
+  vec2_t new_vec = {v.x * scalar, v.y * scalar};
+  return new_vec;
+}
+
+vec2_t vec2_div(vec2_t v, float scalar) {
+  vec2_t new_vec = {v.x / scalar, v.y / scalar};
+  return new_vec;
+}
+
 float vec3_length(vec3_t v) {
   return sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
 }
@@ -24,6 +34,16 @@ vec3_t vec3_add(vec3_t a, vec3_t b) {
 
 vec3_t vec3_sub(vec3_t a, vec3_t b) {
   vec3_t new_vec = {a.x - b.x, a.y - b.y, a.z - b.z};
+  return new_vec;
+}
+
+vec3_t vec3_mul(vec3_t v, float scalar) {
+  vec3_t new_vec = {v.x * scalar, v.y * scalar, v.z * scalar};
+  return new_vec;
+}
+
+vec3_t vec3_div(vec3_t v, float scalar) {
+  vec3_t new_vec = {v.x / scalar, v.y / scalar, v.z / scalar};
   return new_vec;
 }
 
