@@ -10,7 +10,7 @@ triangle_t *triangles_to_render = NULL;
 uint32_t previous_frame_time = 0;
 uint32_t time_to_wait = 0;
 
-vec3_t camera_pos = {0, 0, -5};
+vec3_t camera_pos = {0, 0, 0};
 
 void setup(void) {
   color_buffer = malloc(sizeof(uint32_t) * WINDOW_WIDTH * WINDOW_HEIGHT);
@@ -18,14 +18,12 @@ void setup(void) {
   color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
-  load_obj_data("./assets/f22.obj");
+  load_obj_data("./assets/cube.obj");
 }
 
 vec2_t project(vec3_t point) {
-  vec2_t projected_point = {
-      (fov_factor * point.x) / point.z,
-      (fov_factor * point.y) / point.z,
-  };
+  vec2_t projected_point = {(fov_factor * point.x) / point.z,
+                            (fov_factor * point.y) / point.z};
   return projected_point;
 }
 
@@ -52,7 +50,6 @@ void update(void) {
     SDL_Delay(time_to_wait);
 
   previous_frame_time = SDL_GetTicks();
-
   triangles_to_render = NULL;
 
   mesh.rotation.x += 0.01;
@@ -69,7 +66,7 @@ void update(void) {
     face_vertices[1] = mesh.vertices[current_mesh_face.b - 1];
     face_vertices[2] = mesh.vertices[current_mesh_face.c - 1];
 
-    triangle_t projected_triangle;
+    vec3_t transformed_vertices[3];
 
     // loop all three vertices of the current face and transform them
     for (size_t j = 0; j < 3; j++) {
@@ -79,10 +76,31 @@ void update(void) {
       transformed_vertex = vec3_rotate_z(transformed_vertex, mesh.rotation.z);
 
       // translate vertex away from cam
-      transformed_vertex.z -= camera_pos.z;
+      transformed_vertex.z += 5;
+      transformed_vertices[j] = transformed_vertex;
+    }
 
+    // check backface culling
+    vec3_t vector_a = transformed_vertices[0]; /*    A    */
+    vec3_t vector_b = transformed_vertices[1]; /*   / \   */
+    vec3_t vector_c = transformed_vertices[2]; /*  C  B   */
+
+    vec3_t vector_ab = vec3_sub(vector_b, vector_a);
+    vec3_t vector_ac = vec3_sub(vector_c, vector_a);
+
+    vec3_t normal = vec3_cross(vector_ab, vector_ac);
+    vec3_t camera_ray = vec3_sub(camera_pos, vector_a);
+
+    // check if dot product is negative (out of view)
+    float cam_norm_dot = vec3_dot(normal, camera_ray);
+    if (cam_norm_dot < 0)
+      continue;
+
+    triangle_t projected_triangle;
+    // loop all 3 vertices to perform projection
+    for (size_t j = 0; j < 3; j++) {
       // project current vertex
-      vec2_t projected_point = project(transformed_vertex);
+      vec2_t projected_point = project(transformed_vertices[j]);
 
       // scale and translate projected points to middle of screen
       projected_point.x += (uint16_t)(WINDOW_WIDTH / 2);
