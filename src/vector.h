@@ -11,6 +11,7 @@ typedef struct {
   float z;
 } vec3_t;
 
+void vec2_normalize(vec2_t *normal);
 float vec2_length(vec2_t v);
 float vec2_dot(vec2_t a, vec2_t b);
 vec2_t vec2_add(vec2_t a, vec2_t b);
@@ -18,6 +19,7 @@ vec2_t vec2_sub(vec2_t a, vec2_t b);
 vec2_t vec2_mul(vec2_t v, float scalar);
 vec2_t vec2_div(vec2_t v, float scalar);
 
+void vec3_normalize(vec3_t *normal);
 float vec3_length(vec3_t v);
 float vec3_dot(vec3_t a, vec3_t b);
 vec3_t vec3_add(vec3_t a, vec3_t b);

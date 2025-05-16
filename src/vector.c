@@ -1,6 +1,12 @@
 #include "./vector.h"
 #include <math.h>
 
+void vec2_normalize(vec2_t *v) {
+  float length = vec2_length(*v);
+  v->x /= length;
+  v->y /= length;
+}
+
 float vec2_length(vec2_t v) { return sqrt((v.x * v.x) + (v.y * v.y)); }
 float vec2_dot(vec2_t a, vec2_t b) { return (a.x * b.x) + (a.y * b.y); }
 
@@ -22,6 +28,13 @@ vec2_t vec2_mul(vec2_t v, float scalar) {
 vec2_t vec2_div(vec2_t v, float scalar) {
   vec2_t new_vec = {v.x / scalar, v.y / scalar};
   return new_vec;
+}
+
+void vec3_normalize(vec3_t *v) {
+  float length = vec3_length(*v);
+  v->x /= length;
+  v->y /= length;
+  v->z /= length;
 }
 
 float vec3_length(vec3_t v) {
