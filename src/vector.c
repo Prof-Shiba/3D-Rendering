@@ -2,6 +2,7 @@
 #include <math.h>
 
 float vec2_length(vec2_t v) { return sqrt((v.x * v.x) + (v.y * v.y)); }
+float vec2_dot(vec2_t a, vec2_t b) { return (a.x * b.x) + (a.y + b.y); }
 
 vec2_t vec2_add(vec2_t a, vec2_t b) {
   vec2_t new_vec = {a.x + b.x, a.y + b.y};
@@ -25,6 +26,10 @@ vec2_t vec2_div(vec2_t v, float scalar) {
 
 float vec3_length(vec3_t v) {
   return sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
+}
+
+float vec3_dot(vec3_t a, vec3_t b) {
+  return (a.x * b.x) + (a.y + b.y) + (a.z * b.z);
 }
 
 vec3_t vec3_add(vec3_t a, vec3_t b) {
