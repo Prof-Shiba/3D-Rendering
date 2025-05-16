@@ -40,8 +40,6 @@ bool init_window(void) {
     fprintf(stderr, "SDL failed to make the window fullscreen!\n");
     return false;
   }
-  SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-
   return true;
 }
 
@@ -55,7 +53,7 @@ void clear_color_buffer(uint32_t color) {
 
 void render_color_buffer(void) {
   SDL_UpdateTexture(color_buffer_texture, NULL, color_buffer,
-                    (uint32_t)(WINDOW_WIDTH * sizeof(uint32_t)));
+                    (WINDOW_WIDTH * sizeof(uint32_t)));
 
   SDL_RenderCopy(renderer, color_buffer_texture, NULL, NULL);
 }
@@ -63,8 +61,13 @@ void render_color_buffer(void) {
 void draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
   if (x >= 0 && x < WINDOW_WIDTH && y >= 0 && y < WINDOW_HEIGHT)
     color_buffer[(WINDOW_WIDTH * y) + x] = color;
+  else
+    fprintf(stderr,
+            "Attempting to draw outside screen boundaries. Ignoring pixels.");
 }
 
+// NOTE: Redo this formula later. Significantly less peformant, but easier to
+// understand; 2025-05-15
 void draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
                uint32_t color) {
   int16_t delta_x = (x1 - x0);
