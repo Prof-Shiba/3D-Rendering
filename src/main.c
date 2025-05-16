@@ -13,8 +13,7 @@ uint32_t time_to_wait = 0;
 vec3_t camera_pos = {0, 0, -5};
 
 void setup(void) {
-  color_buffer =
-      (uint32_t *)malloc(sizeof(uint32_t) * WINDOW_WIDTH * WINDOW_HEIGHT);
+  color_buffer = malloc(sizeof(uint32_t) * WINDOW_WIDTH * WINDOW_HEIGHT);
 
   color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                                            SDL_TEXTUREACCESS_STREAMING,
