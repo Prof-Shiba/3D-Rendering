@@ -107,11 +107,11 @@ void render(void) {
 
     // vertex points
     draw_rectangle(current_triangle.points[0].x, current_triangle.points[0].y,
-                   3, 3, 0xFF00FF00);
+                   3, 3, 0xFFFFFF00);
     draw_rectangle(current_triangle.points[1].x, current_triangle.points[1].y,
-                   3, 3, 0xFF00FF00);
+                   3, 3, 0xFFFFFF00);
     draw_rectangle(current_triangle.points[2].x, current_triangle.points[2].y,
-                   3, 3, 0xFF00FF00);
+                   3, 3, 0xFFFFFF00);
     // faces
     draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
                   current_triangle.points[1].x, current_triangle.points[1].y,
