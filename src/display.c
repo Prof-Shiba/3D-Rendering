@@ -63,7 +63,7 @@ void draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
     color_buffer[(WINDOW_WIDTH * y) + x] = color;
   else
     fprintf(stderr,
-            "Attempting to draw outside screen boundaries. Ignoring pixels.");
+            "Attempting to draw outside screen boundaries. Ignoring pixels.\n");
 }
 
 // NOTE: Redo this formula later. Significantly less performant, but easier to
