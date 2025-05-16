@@ -66,7 +66,7 @@ void draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
             "Attempting to draw outside screen boundaries. Ignoring pixels.");
 }
 
-// NOTE: Redo this formula later. Significantly less peformant, but easier to
+// NOTE: Redo this formula later. Significantly less performant, but easier to
 // understand; 2025-05-15
 void draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
                uint32_t color) {
