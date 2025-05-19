@@ -18,7 +18,7 @@ void setup(void) {
   color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
-  load_obj_data("./assets/cube.obj");
+  load_obj_data("./assets/f22.obj");
 }
 
 vec2_t project(vec3_t point) {
@@ -125,17 +125,19 @@ void render(void) {
   // loop all projected triangles and render them
   uint32_t num_of_triangles = array_length(triangles_to_render);
 
-  // for (size_t i = 0; i < num_of_triangles; i++) {
-  //   triangle_t current_triangle = triangles_to_render[i];
-  //
-  //   // faces
-  //   draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
-  //                 current_triangle.points[1].x, current_triangle.points[1].y,
-  //                 current_triangle.points[2].x, current_triangle.points[2].y,
-  //                 0xFF00FF00);
-  // }
+  for (size_t i = 0; i < num_of_triangles; i++) {
+    triangle_t current_triangle = triangles_to_render[i];
 
-  draw_filled_triangle(300, 300, 50, 400, 500, 700, 0xFF00FF00);
+    draw_filled_triangle(
+        current_triangle.points[0].x, current_triangle.points[0].y,
+        current_triangle.points[1].x, current_triangle.points[1].y,
+        current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFFFFFF);
+
+    draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
+                  current_triangle.points[1].x, current_triangle.points[1].y,
+                  current_triangle.points[2].x, current_triangle.points[2].y,
+                  0xFF000000);
+  }
 
   // clear array since its redone every frame
   // NOTE: change soon 2025-05-10
