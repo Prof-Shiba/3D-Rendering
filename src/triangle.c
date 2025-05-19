@@ -56,9 +56,16 @@ void draw_filled_triangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
     int_swap(&x0, &x1);
   }
 
-  uint16_t My = y1;
-  uint16_t Mx = ((x2 - x0) * (y1 - y0)) / (y2 - y0) + x0;
+  // avoid division by zero errors, only draw flat bottom
+  if (y1 == y2)
+    fill_bottom_tri(x0, y0, x1, y1, x2, y2, color);
+  else if (y0 == y1)
+    fill_top_tri(x0, y0, x1, y1, x2, y2, color);
+  else {
+    uint16_t My = y1;
+    uint16_t Mx = ((x2 - x0) * (y1 - y0)) / (y2 - y0) + x0;
 
-  fill_bottom_tri(x0, y0, x1, y1, Mx, My, color);
-  fill_top_tri(x1, y1, Mx, My, x2, y2, color);
+    fill_bottom_tri(x0, y0, x1, y1, Mx, My, color);
+    fill_top_tri(x1, y1, Mx, My, x2, y2, color);
+  }
 }
