@@ -11,3 +11,6 @@ typedef struct {
 typedef struct {
   vec2_t points[3];
 } triangle_t;
+
+void draw_filled_triangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
+                          uint16_t x2, uint16_t y2, uint32_t color);
