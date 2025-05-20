@@ -18,7 +18,9 @@ void fill_bottom_tri(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
   float x_end = x0;
 
   for (size_t y = y0; y <= y2; y++) {
-    draw_line(x_start, y, x_end, y, color);
+    // NOTE: check + 1 and - 1 if any future issues. Should
+    // avoid rendering the start and end positions twice.
+    draw_line(x_start + 1, y, x_end - 1, y, color);
     x_start += inv_slope_1;
     x_end += inv_slope_2;
   }
@@ -33,7 +35,7 @@ void fill_top_tri(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
   float x_end = x2;
 
   for (size_t y = y2; y >= y0; y--) {
-    draw_line(x_start, y, x_end, y, color);
+    draw_line(x_start + 1, y, x_end - 1, y, color);
     x_start -= inv_slope_1;
     x_end -= inv_slope_2;
   }
