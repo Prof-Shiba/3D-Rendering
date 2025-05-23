@@ -5,7 +5,7 @@
 
 bool is_running = false;
 bool enable_backface_culling = true;
-bool render_modes[4];
+bool render_modes[4] = {false};
 float fov_factor = 900; // our scalar
 triangle_t *triangles_to_render = NULL;
 
@@ -20,7 +20,7 @@ void setup(void) {
   color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
-  load_obj_data("./assets/cube.obj");
+  load_obj_data("./assets/f22.obj");
   render_modes[0] = true;
 }
 
