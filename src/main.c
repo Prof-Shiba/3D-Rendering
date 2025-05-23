@@ -4,6 +4,7 @@
 #include "./vector.h"
 
 bool is_running = false;
+bool enable_backface_culling = true;
 float fov_factor = 900; // our scalar
 triangle_t *triangles_to_render = NULL;
 
@@ -18,7 +19,7 @@ void setup(void) {
   color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
-  load_obj_data("./assets/f22.obj");
+  load_obj_data("./assets/cube.obj");
 }
 
 vec2_t project(vec3_t point) {
@@ -36,11 +37,42 @@ void process_input(void) {
     is_running = false;
     break;
 
+  // TODO:
+  // Pressing “F1” displays the wireframe and a small red dot for each triangle vertex
+  // Pressing “F2” displays only the wireframe lines
+  // Pressing “F3” displays filled triangles with a solid color
+  // Pressing “F4” displays both filled triangles and wireframe lines
   case SDL_KEYDOWN:
     if (event.key.keysym.sym == SDLK_ESCAPE) {
       is_running = false;
       break;
     }
+
+    if (event.key.keysym.sym == SDLK_F1) {
+        // TODO: Do something
+        break;
+    }
+
+    if (event.key.keysym.sym == SDLK_F2) {
+        // TODO: Do something
+        break;
+    }
+
+    if (event.key.keysym.sym == SDLK_F3) {
+        // TODO: Do something
+        break;
+    }
+
+    if (event.key.keysym.sym == SDLK_F4) {
+        // TODO: Do something
+        break;
+    }
+
+    if (event.key.keysym.sym == SDLK_F5) {
+        (enable_backface_culling) ? (enable_backface_culling = false) :
+        (enable_backface_culling = true);
+        break;
+      }
   }
 }
 
@@ -80,26 +112,28 @@ void update(void) {
       transformed_vertices[j] = transformed_vertex;
     }
 
-    // check backface culling
-    vec3_t vector_a = transformed_vertices[0]; /*    A    */
-    vec3_t vector_b = transformed_vertices[1]; /*   / \   */
-    vec3_t vector_c = transformed_vertices[2]; /*  C  B   */
+    if (enable_backface_culling) {
+      // check backface culling
+      vec3_t vector_a = transformed_vertices[0]; /*    A    */
+      vec3_t vector_b = transformed_vertices[1]; /*   / \   */
+      vec3_t vector_c = transformed_vertices[2]; /*  C  B   */
 
-    vec3_t vector_ab = vec3_sub(vector_b, vector_a);
-    vec3_t vector_ac = vec3_sub(vector_c, vector_a);
-    vec3_normalize(&vector_ab);
-    vec3_normalize(&vector_ac);
+      vec3_t vector_ab = vec3_sub(vector_b, vector_a);
+      vec3_t vector_ac = vec3_sub(vector_c, vector_a);
+      vec3_normalize(&vector_ab);
+      vec3_normalize(&vector_ac);
 
-    vec3_t normal = vec3_cross(vector_ab, vector_ac);
-    // NOTE: it's normal to normalize the normal vector. perfectly normal.
-    vec3_normalize(&normal);
+      vec3_t normal = vec3_cross(vector_ab, vector_ac);
+      // NOTE: it's normal to normalize the normal vector. perfectly normal.
+      vec3_normalize(&normal);
 
-    vec3_t camera_ray = vec3_sub(camera_pos, vector_a);
+      vec3_t camera_ray = vec3_sub(camera_pos, vector_a);
 
-    // check if dot product is negative (out of view)
-    float cam_norm_dot = vec3_dot(normal, camera_ray);
-    if (cam_norm_dot < 0)
-      continue;
+      // check if dot product is negative (out of view)
+      float cam_norm_dot = vec3_dot(normal, camera_ray);
+      if (cam_norm_dot < 0)
+        continue;
+    }
 
     triangle_t projected_triangle;
     // loop all 3 vertices to perform projection
@@ -128,6 +162,7 @@ void render(void) {
   for (size_t i = 0; i < num_of_triangles; i++) {
     triangle_t current_triangle = triangles_to_render[i];
 
+    // TODO: Switch statements here? think about how to sep each rendering mode?
     draw_filled_triangle(
         current_triangle.points[0].x, current_triangle.points[0].y,
         current_triangle.points[1].x, current_triangle.points[1].y,
