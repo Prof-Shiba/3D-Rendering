@@ -5,7 +5,7 @@
 
 bool is_running = false;
 bool enable_backface_culling = true;
-bool render_modes[4] = {false};
+uint8_t render_modes = 1;
 float fov_factor = 900; // our scalar
 triangle_t *triangles_to_render = NULL;
 
@@ -21,7 +21,6 @@ void setup(void) {
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
   load_obj_data("./assets/f22.obj");
-  render_modes[0] = true;
 }
 
 vec2_t project(vec3_t point) {
@@ -46,34 +45,22 @@ void process_input(void) {
     }
 
     if (event.key.keysym.sym == SDLK_F1) {
-      render_modes[0] = true;
-      render_modes[1] = false;
-      render_modes[2] = false;
-      render_modes[3] = false;
+      render_modes = 1;
       break;
     }
 
     if (event.key.keysym.sym == SDLK_F2) {
-      render_modes[0] = false;
-      render_modes[1] = true;
-      render_modes[2] = false;
-      render_modes[3] = false;
+      render_modes = 2;
       break;
     }
 
     if (event.key.keysym.sym == SDLK_F3) {
-      render_modes[0] = false;
-      render_modes[1] = false;
-      render_modes[2] = true;
-      render_modes[3] = false;
+      render_modes = 3;
       break;
     }
 
     if (event.key.keysym.sym == SDLK_F4) {
-      render_modes[0] = false;
-      render_modes[1] = false;
-      render_modes[2] = false;
-      render_modes[3] = true;
+      render_modes = 4;
       break;
     }
 
@@ -172,7 +159,7 @@ void render(void) {
     triangle_t current_triangle = triangles_to_render[i];
 
     // wireframe with red vertex dots
-    if (render_modes[0]) {
+    if (render_modes == 1) {
       draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
                     current_triangle.points[1].x, current_triangle.points[1].y,
                     current_triangle.points[2].x, current_triangle.points[2].y,
@@ -186,14 +173,14 @@ void render(void) {
                  0xFFFF0000);
     }
     // wireframe
-    else if (render_modes[1]) {
+    else if (render_modes == 2) {
       draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
                     current_triangle.points[1].x, current_triangle.points[1].y,
                     current_triangle.points[2].x, current_triangle.points[2].y,
                     0xFF00FF00);
     }
     // filled object
-    else if (render_modes[2]) {
+    else if (render_modes == 3) {
       draw_filled_triangle(
           current_triangle.points[0].x, current_triangle.points[0].y,
           current_triangle.points[1].x, current_triangle.points[1].y,
@@ -201,7 +188,7 @@ void render(void) {
           0xFFFFFFFF);
     }
     // filled object with wireframe
-    else if (render_modes[3]) {
+    else if (render_modes == 4) {
       draw_filled_triangle(
           current_triangle.points[0].x, current_triangle.points[0].y,
           current_triangle.points[1].x, current_triangle.points[1].y,
