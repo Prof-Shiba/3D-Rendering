@@ -46,42 +46,42 @@ void process_input(void) {
     }
 
     if (event.key.keysym.sym == SDLK_F1) {
-        render_modes[0] = true;
-        render_modes[1] = false;
-        render_modes[2] = false;
-        render_modes[3] = false;
-        break;
+      render_modes[0] = true;
+      render_modes[1] = false;
+      render_modes[2] = false;
+      render_modes[3] = false;
+      break;
     }
 
     if (event.key.keysym.sym == SDLK_F2) {
-        render_modes[0] = false;
-        render_modes[1] = true;
-        render_modes[2] = false;
-        render_modes[3] = false;
-        break;
+      render_modes[0] = false;
+      render_modes[1] = true;
+      render_modes[2] = false;
+      render_modes[3] = false;
+      break;
     }
 
     if (event.key.keysym.sym == SDLK_F3) {
-        render_modes[0] = false;
-        render_modes[1] = false;
-        render_modes[2] = true;
-        render_modes[3] = false;
-        break;
+      render_modes[0] = false;
+      render_modes[1] = false;
+      render_modes[2] = true;
+      render_modes[3] = false;
+      break;
     }
 
     if (event.key.keysym.sym == SDLK_F4) {
-        render_modes[0] = false;
-        render_modes[1] = false;
-        render_modes[2] = false;
-        render_modes[3] = true;
-        break;
+      render_modes[0] = false;
+      render_modes[1] = false;
+      render_modes[2] = false;
+      render_modes[3] = true;
+      break;
     }
 
     if (event.key.keysym.sym == SDLK_F5) {
-        (enable_backface_culling) ? (enable_backface_culling = false) :
-        (enable_backface_culling = true);
-        break;
-      }
+      (enable_backface_culling) ? (enable_backface_culling = false)
+                                : (enable_backface_culling = true);
+      break;
+    }
   }
 }
 
@@ -174,41 +174,45 @@ void render(void) {
     // wireframe with red vertex dots
     if (render_modes[0]) {
       draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
-                  current_triangle.points[1].x, current_triangle.points[1].y,
-                  current_triangle.points[2].x, current_triangle.points[2].y,
-                  0xFF00FF00);
+                    current_triangle.points[1].x, current_triangle.points[1].y,
+                    current_triangle.points[2].x, current_triangle.points[2].y,
+                    0xFF00FF00);
 
-      draw_pixel(current_triangle.points[0].x, current_triangle.points[0].y, 0xFFFF0000);
-      draw_pixel(current_triangle.points[1].x, current_triangle.points[1].y, 0xFFFF0000);
-      draw_pixel(current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFF0000);
+      draw_pixel(current_triangle.points[0].x, current_triangle.points[0].y,
+                 0xFFFF0000);
+      draw_pixel(current_triangle.points[1].x, current_triangle.points[1].y,
+                 0xFFFF0000);
+      draw_pixel(current_triangle.points[2].x, current_triangle.points[2].y,
+                 0xFFFF0000);
     }
     // wireframe
     else if (render_modes[1]) {
       draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
-                  current_triangle.points[1].x, current_triangle.points[1].y,
-                  current_triangle.points[2].x, current_triangle.points[2].y,
-                  0xFF00FF00);
+                    current_triangle.points[1].x, current_triangle.points[1].y,
+                    current_triangle.points[2].x, current_triangle.points[2].y,
+                    0xFF00FF00);
     }
     // filled object
     else if (render_modes[2]) {
       draw_filled_triangle(
           current_triangle.points[0].x, current_triangle.points[0].y,
           current_triangle.points[1].x, current_triangle.points[1].y,
-          current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFFFFFF);
+          current_triangle.points[2].x, current_triangle.points[2].y,
+          0xFFFFFFFF);
     }
     // filled object with wireframe
     else if (render_modes[3]) {
       draw_filled_triangle(
           current_triangle.points[0].x, current_triangle.points[0].y,
           current_triangle.points[1].x, current_triangle.points[1].y,
-          current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFFFFFF);
+          current_triangle.points[2].x, current_triangle.points[2].y,
+          0xFFFFFFFF);
 
       draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
-                  current_triangle.points[1].x, current_triangle.points[1].y,
-                  current_triangle.points[2].x, current_triangle.points[2].y,
-                  0xFF00FF00);
+                    current_triangle.points[1].x, current_triangle.points[1].y,
+                    current_triangle.points[2].x, current_triangle.points[2].y,
+                    0xFF00FF00);
     }
-
   }
 
   // clear array since its redone every frame
