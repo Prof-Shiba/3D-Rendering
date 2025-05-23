@@ -5,6 +5,7 @@
 
 bool is_running = false;
 bool enable_backface_culling = true;
+bool render_modes[4];
 float fov_factor = 900; // our scalar
 triangle_t *triangles_to_render = NULL;
 
@@ -20,6 +21,7 @@ void setup(void) {
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
   load_obj_data("./assets/cube.obj");
+  render_modes[0] = true;
 }
 
 vec2_t project(vec3_t point) {
@@ -49,12 +51,18 @@ void process_input(void) {
     }
 
     if (event.key.keysym.sym == SDLK_F1) {
-        // TODO: Do something
+        render_modes[0] = true;
+        render_modes[1] = false;
+        render_modes[2] = false;
+        render_modes[3] = false;
         break;
     }
 
     if (event.key.keysym.sym == SDLK_F2) {
-        // TODO: Do something
+        render_modes[0] = false;
+        render_modes[1] = true;
+        render_modes[2] = false;
+        render_modes[3] = false;
         break;
     }
 
@@ -162,16 +170,29 @@ void render(void) {
   for (size_t i = 0; i < num_of_triangles; i++) {
     triangle_t current_triangle = triangles_to_render[i];
 
-    // TODO: Switch statements here? think about how to sep each rendering mode?
-    draw_filled_triangle(
-        current_triangle.points[0].x, current_triangle.points[0].y,
-        current_triangle.points[1].x, current_triangle.points[1].y,
-        current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFFFFFF);
-
-    draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
+    if (render_modes[0]) {
+      draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
                   current_triangle.points[1].x, current_triangle.points[1].y,
                   current_triangle.points[2].x, current_triangle.points[2].y,
-                  0xFF000000);
+                  0xFF00FF00);
+
+      draw_pixel(current_triangle.points[0].x, current_triangle.points[0].y, 0xFFFF0000);
+      draw_pixel(current_triangle.points[1].x, current_triangle.points[1].y, 0xFFFF0000);
+      draw_pixel(current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFF0000);
+    }
+    if (render_modes[1]) {
+      draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
+                  current_triangle.points[1].x, current_triangle.points[1].y,
+                  current_triangle.points[2].x, current_triangle.points[2].y,
+                  0xFF00FF00);
+    }
+
+
+    // draw_filled_triangle(
+    //     current_triangle.points[0].x, current_triangle.points[0].y,
+    //     current_triangle.points[1].x, current_triangle.points[1].y,
+    //     current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFFFFFF);
+
   }
 
   // clear array since its redone every frame
