@@ -39,11 +39,6 @@ void process_input(void) {
     is_running = false;
     break;
 
-  // TODO:
-  // Pressing “F1” displays the wireframe and a small red dot for each triangle vertex
-  // Pressing “F2” displays only the wireframe lines
-  // Pressing “F3” displays filled triangles with a solid color
-  // Pressing “F4” displays both filled triangles and wireframe lines
   case SDL_KEYDOWN:
     if (event.key.keysym.sym == SDLK_ESCAPE) {
       is_running = false;
@@ -67,12 +62,18 @@ void process_input(void) {
     }
 
     if (event.key.keysym.sym == SDLK_F3) {
-        // TODO: Do something
+        render_modes[0] = false;
+        render_modes[1] = false;
+        render_modes[2] = true;
+        render_modes[3] = false;
         break;
     }
 
     if (event.key.keysym.sym == SDLK_F4) {
-        // TODO: Do something
+        render_modes[0] = false;
+        render_modes[1] = false;
+        render_modes[2] = false;
+        render_modes[3] = true;
         break;
     }
 
@@ -170,6 +171,7 @@ void render(void) {
   for (size_t i = 0; i < num_of_triangles; i++) {
     triangle_t current_triangle = triangles_to_render[i];
 
+    // wireframe with red vertex dots
     if (render_modes[0]) {
       draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
                   current_triangle.points[1].x, current_triangle.points[1].y,
@@ -180,18 +182,32 @@ void render(void) {
       draw_pixel(current_triangle.points[1].x, current_triangle.points[1].y, 0xFFFF0000);
       draw_pixel(current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFF0000);
     }
-    if (render_modes[1]) {
+    // wireframe
+    else if (render_modes[1]) {
       draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
                   current_triangle.points[1].x, current_triangle.points[1].y,
                   current_triangle.points[2].x, current_triangle.points[2].y,
                   0xFF00FF00);
     }
+    // filled object
+    else if (render_modes[2]) {
+      draw_filled_triangle(
+          current_triangle.points[0].x, current_triangle.points[0].y,
+          current_triangle.points[1].x, current_triangle.points[1].y,
+          current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFFFFFF);
+    }
+    // filled object with wireframe
+    else if (render_modes[3]) {
+      draw_filled_triangle(
+          current_triangle.points[0].x, current_triangle.points[0].y,
+          current_triangle.points[1].x, current_triangle.points[1].y,
+          current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFFFFFF);
 
-
-    // draw_filled_triangle(
-    //     current_triangle.points[0].x, current_triangle.points[0].y,
-    //     current_triangle.points[1].x, current_triangle.points[1].y,
-    //     current_triangle.points[2].x, current_triangle.points[2].y, 0xFFFFFFFF);
+      draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
+                  current_triangle.points[1].x, current_triangle.points[1].y,
+                  current_triangle.points[2].x, current_triangle.points[2].y,
+                  0xFF00FF00);
+    }
 
   }
 
