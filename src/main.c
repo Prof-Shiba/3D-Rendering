@@ -155,50 +155,34 @@ void render(void) {
   // loop all projected triangles and render them
   uint32_t num_of_triangles = array_length(triangles_to_render);
 
+  // NOTE: Rendering modes will fail to render in the desired z_order
+  // as of right now, unless manually placed in this arrangement
   for (size_t i = 0; i < num_of_triangles; i++) {
     triangle_t current_triangle = triangles_to_render[i];
 
-    // wireframe with red vertex dots
-    if (render_modes == 1) {
-      draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
-                    current_triangle.points[1].x, current_triangle.points[1].y,
-                    current_triangle.points[2].x, current_triangle.points[2].y,
-                    0xFF00FF00);
-
-      draw_pixel(current_triangle.points[0].x, current_triangle.points[0].y,
-                 0xFFFF0000);
-      draw_pixel(current_triangle.points[1].x, current_triangle.points[1].y,
-                 0xFFFF0000);
-      draw_pixel(current_triangle.points[2].x, current_triangle.points[2].y,
-                 0xFFFF0000);
+    // filled object
+    if (render_modes == 3 || render_modes == 4) {
+      draw_filled_triangle(
+          current_triangle.points[0].x, current_triangle.points[0].y,
+          current_triangle.points[1].x, current_triangle.points[1].y,
+          current_triangle.points[2].x, current_triangle.points[2].y,
+          0xFFFFFFFF);
     }
     // wireframe
-    else if (render_modes == 2) {
+    if (render_modes == 1 || render_modes == 2 || render_modes == 4) {
       draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
                     current_triangle.points[1].x, current_triangle.points[1].y,
                     current_triangle.points[2].x, current_triangle.points[2].y,
                     0xFF00FF00);
     }
-    // filled object
-    else if (render_modes == 3) {
-      draw_filled_triangle(
-          current_triangle.points[0].x, current_triangle.points[0].y,
-          current_triangle.points[1].x, current_triangle.points[1].y,
-          current_triangle.points[2].x, current_triangle.points[2].y,
-          0xFFFFFFFF);
-    }
-    // filled object with wireframe
-    else if (render_modes == 4) {
-      draw_filled_triangle(
-          current_triangle.points[0].x, current_triangle.points[0].y,
-          current_triangle.points[1].x, current_triangle.points[1].y,
-          current_triangle.points[2].x, current_triangle.points[2].y,
-          0xFFFFFFFF);
-
-      draw_triangle(current_triangle.points[0].x, current_triangle.points[0].y,
-                    current_triangle.points[1].x, current_triangle.points[1].y,
-                    current_triangle.points[2].x, current_triangle.points[2].y,
-                    0xFF00FF00);
+    // red vertex dots
+    if (render_modes == 1) {
+      draw_rectangle(current_triangle.points[0].x, current_triangle.points[0].y,
+                     3, 3, 0xFFFF0000);
+      draw_rectangle(current_triangle.points[1].x, current_triangle.points[1].y,
+                     3, 3, 0xFFFF0000);
+      draw_rectangle(current_triangle.points[2].x, current_triangle.points[2].y,
+                     3, 3, 0xFFFF0000);
     }
   }
 
