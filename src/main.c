@@ -130,6 +130,10 @@ void update(void) {
       if (cam_norm_dot < 0)
         continue;
     }
+    // TODO: implement a proper z-ordering system later
+    float depth = (transformed_vertices[0].z + transformed_vertices[1].z +
+                   transformed_vertices[2].z) /
+                  3;
 
     triangle_t projected_triangle;
     // loop all 3 vertices to perform projection
@@ -142,11 +146,13 @@ void update(void) {
       projected_point.y += (uint16_t)(WINDOW_HEIGHT / 2);
 
       projected_triangle.points[j] = projected_point;
+      projected_triangle.avg_depth = depth;
     }
-
     // save the projected triangle in the array of triangles to render
     array_push(triangles_to_render, projected_triangle);
   }
+  // TODO: sort triangles by avg depth, back to front
+  //
 }
 
 void render(void) {

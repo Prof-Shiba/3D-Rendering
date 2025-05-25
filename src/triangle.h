@@ -10,6 +10,7 @@ typedef struct {
 
 typedef struct {
   vec2_t points[3];
+  float avg_depth;
 } triangle_t;
 
 void draw_filled_triangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
