@@ -38,7 +38,7 @@ void setup(void) {
 
   size_t len = strlen(buffer);
   if (len > 0 && buffer[len - 1] != '\n') {
-    fprintf(stderr, "Filename too long for buffer!");
+    fprintf(stderr, "Filename too long for buffer!\n");
     exit(1);
   }
 
