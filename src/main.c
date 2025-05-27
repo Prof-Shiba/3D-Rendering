@@ -3,9 +3,11 @@
 #include "./mesh.h"
 #include "./vector.h"
 
+#define MAX_FILE_LENGTH 150
+
 bool is_running = false;
 bool enable_backface_culling = true;
-uint8_t render_modes = 1;
+uint8_t render_modes = 2;
 float fov_factor = 900; // our scalar
 triangle_t *triangles_to_render = NULL;
 
@@ -20,7 +22,33 @@ void setup(void) {
   color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
-  load_obj_data("./assets/f22.obj");
+
+  FILE *f = fopen("./assets/obj_data.txt", "r");
+  if (!f) {
+    fprintf(stderr, "Failed opening obj_data file!\n");
+    exit(1);
+  }
+
+  char buffer[MAX_FILE_LENGTH];
+  if (!fgets(buffer, sizeof(buffer), f)) {
+    fprintf(stderr, "Failed to read the obj_data file!\n");
+    fclose(f);
+    exit(1);
+  };
+
+  size_t len = strlen(buffer);
+  if (len > 0 && buffer[len - 1] != '\n') {
+    fprintf(stderr, "Filename too long for buffer!");
+    exit(1);
+  }
+
+  fclose(f);
+  f = NULL;
+
+  // very nice function. replaces the first '\n'
+  // with a '\0'
+  buffer[strcspn(buffer, "\n")] = 0;
+  load_obj_data(buffer);
 }
 
 vec2_t project(vec3_t point) {
@@ -151,8 +179,25 @@ void update(void) {
     // save the projected triangle in the array of triangles to render
     array_push(triangles_to_render, projected_triangle);
   }
-  // TODO: sort triangles by avg depth, back to front
-  //
+
+  uint32_t arr_len = array_length(triangles_to_render);
+  size_t i = 0;
+  bool swapped = false;
+
+  // bubble
+  do {
+    swapped = false;
+    for (size_t j = 0; j < arr_len - 1 - i; j++) {
+      if (triangles_to_render[j].avg_depth >
+          triangles_to_render[j + 1].avg_depth) {
+        float temp = triangles_to_render[j].avg_depth;
+        triangles_to_render[j].avg_depth = triangles_to_render[j + 1].avg_depth;
+        triangles_to_render[j + 1].avg_depth = temp;
+        swapped = true;
+      }
+    }
+    i++;
+  } while (swapped);
 }
 
 void render(void) {
