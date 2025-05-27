@@ -184,7 +184,9 @@ void update(void) {
   size_t i = 0;
   bool swapped = false;
 
-  // bubble
+  // bubble sort for triangles based on
+  // avg_depth. sketchy temporary workaround
+  // for having no z_index yet
   do {
     swapped = false;
     for (size_t j = 0; j < arr_len - 1 - i; j++) {
