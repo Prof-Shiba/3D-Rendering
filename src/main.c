@@ -7,7 +7,7 @@
 
 bool is_running = false;
 bool enable_backface_culling = true;
-uint8_t render_modes = 2;
+uint8_t render_modes = 1;
 float fov_factor = 900; // our scalar
 triangle_t *triangles_to_render = NULL;
 
@@ -229,7 +229,7 @@ void render(void) {
                     0xFF00FF00);
     }
     // red vertex dots
-    if (render_modes == 1) {
+    if (render_modes == 2) {
       draw_rectangle(current_triangle.points[0].x, current_triangle.points[0].y,
                      3, 3, 0xFFFF0000);
       draw_rectangle(current_triangle.points[1].x, current_triangle.points[1].y,
