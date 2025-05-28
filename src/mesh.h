@@ -1,6 +1,6 @@
 #pragma once
 #include "./triangle.h"
-#include "./vector.h"
+#include "../math/vector.h"
 
 typedef struct {
   vec3_t *vertices;

@@ -1,7 +1,7 @@
 #include "./array.h"
 #include "./display.h"
 #include "./mesh.h"
-#include "./vector.h"
+#include "../math/vector.h"
 
 #define MAX_FILE_LENGTH 150
 

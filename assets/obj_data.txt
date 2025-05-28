@@ -1,1 +1,1 @@
-./assets/cube.obj
+./assets/f22.obj
