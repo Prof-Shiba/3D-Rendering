@@ -62,6 +62,7 @@ void draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
   if (x >= 0 && x < WINDOW_WIDTH && y >= 0 && y < WINDOW_HEIGHT)
     color_buffer[(WINDOW_WIDTH * y) + x] = color;
   else {
+    // TODO: Better error handling here, instead of just blindly exiting
     fprintf(stderr,
             "Attempting to draw outside screen boundaries. Ignoring pixels.\n");
     exit(1);
