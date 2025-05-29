@@ -48,3 +48,61 @@ mat4_t mat4_translation(float translation_x, float translation_y, float translat
 
   return m;
 }
+
+mat4_t mat4_rotation_x(float angle) {
+  float cosine = cos(angle);
+  float sine = sin(angle);
+  // | 1 0 0 0  |
+  // | 0 c -s 0 |
+  // | 0 s c 0  |
+  // | 0 0 0 1  |
+
+  mat4_t m = mat4_identity();
+  m.m[1][1] = cosine;
+  m.m[1][2] = -sine;
+  m.m[2][1] = sine;
+  m.m[2][2] = cosine;
+  return m;
+}
+
+mat4_t mat4_rotation_y(float angle) {
+  float cosine = cos(angle);
+  float sine = sin(angle);
+  // | c 0 s 0  |
+  // | 0 1 0 0  |
+  // | -s 0 c 0 |
+  // | 0 0 0 1  |
+
+  mat4_t m = mat4_identity();
+  m.m[0][0] = cosine;
+  m.m[0][2] = sine;
+  m.m[2][0] = -sine;
+  m.m[2][2] = cosine;
+  return m;
+}
+
+mat4_t mat4_rotation_z(float angle) {
+  float cosine = cos(angle);
+  float sine = sin(angle);
+  // | c -s 0 0 |
+  // | s c 0 0  |
+  // | 0 0 1 0  |
+  // | 0 0 0 1  |
+
+  mat4_t m = mat4_identity();
+  m.m[0][0] = cosine;
+  m.m[0][1] = -sine;
+  m.m[1][0] = sine;
+  m.m[1][1] = cosine;
+  return m;
+}
+
+mat4_t mat4_mul_mat4(mat4_t lhs, mat4_t rhs) {
+  mat4_t result;
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      result.m[i][j] = (lhs.m[i][0] * rhs.m[0][j]) + (lhs.m[i][1] * rhs.m[1][j]) + (lhs.m[i][2] * rhs.m[2][j]) + (lhs.m[i][3] * rhs.m[3][j]);
+    }
+  }
+  return result;
+}
