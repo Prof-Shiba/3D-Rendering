@@ -4,6 +4,9 @@
 #include "../math/vector.h"
 #include "../math/matrix.h"
 
+// FIXME: Currently takes 4 seconds to run the program?
+// wtf?
+
 #define MAX_FILE_LENGTH 150
 
 bool is_running = false;
@@ -109,13 +112,21 @@ void update(void) {
   previous_frame_time = SDL_GetTicks();
   triangles_to_render = NULL;
 
-  mesh.rotation.x += 0.01;
-  mesh.rotation.y += 0.01;
-  mesh.rotation.z += 0.01;
-  mesh.scale.x += 0.002;
-  mesh.scale.y += 0.002;
+  // FIXME:
+  // mesh.rotation.x += 0.01;
+  // mesh.rotation.y += 0.01;
+  // mesh.rotation.z += 0.01;
 
+  // mesh.scale.x += 0.002;
+  // mesh.scale.y += 0.002;
+
+  mesh.translation.x += 0.01;
+  mesh.translation.y = 0.5;
+  mesh.translation.z = 5;
+
+  // scale and translation matrix for multiplying mesh vertices
   mat4_t scale_m = mat4_scale(mesh.scale.x, mesh.scale.y, mesh.scale.z);
+  mat4_t trans_m = mat4_translation(mesh.translation.x, mesh.translation.y, mesh.translation.z);
 
   uint32_t num_faces = array_length(mesh.faces);
 
@@ -134,9 +145,8 @@ void update(void) {
       vec4_t transformed_vertex = vec4_from_vec3(face_vertices[j]);
 
       transformed_vertex = mat4_mul_vec4(scale_m, transformed_vertex);
+      transformed_vertex = mat4_mul_vec4(trans_m, transformed_vertex);
 
-      // translate vertex away from cam
-      transformed_vertex.z += 5;
       transformed_vertices[j] = transformed_vertex;
     }
 
