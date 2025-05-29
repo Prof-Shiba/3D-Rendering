@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-mesh_t mesh = {.vertices = NULL, .faces = NULL, .rotation = {0, 0, 0}};
+mesh_t mesh = {.vertices = NULL, .faces = NULL, .rotation = {0, 0, 0}, .scale = {1, 1, 1}, .translation = {0, 0, 0}};
 
 void load_obj_data(char *file_src) {
   FILE *file = fopen(file_src, "r");
