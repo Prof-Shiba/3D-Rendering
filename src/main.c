@@ -5,7 +5,6 @@
 #include "../math/matrix.h"
 
 // FIXME: Currently takes 4 seconds to run the program?
-// wtf?
 
 #define MAX_FILE_LENGTH 150
 
@@ -112,21 +111,23 @@ void update(void) {
   previous_frame_time = SDL_GetTicks();
   triangles_to_render = NULL;
 
-  // FIXME:
-  // mesh.rotation.x += 0.01;
-  // mesh.rotation.y += 0.01;
+  mesh.rotation.x += 0.03;
+  mesh.rotation.y += 0.01;
   // mesh.rotation.z += 0.01;
 
   // mesh.scale.x += 0.002;
   // mesh.scale.y += 0.002;
 
-  mesh.translation.x += 0.01;
+  mesh.translation.x = 0.01;
   mesh.translation.y = 0.5;
   mesh.translation.z = 5;
 
-  // scale and translation matrix for multiplying mesh vertices
+  // scale, rotation, and translation matrix for multiplying mesh vertices
   mat4_t scale_m = mat4_scale(mesh.scale.x, mesh.scale.y, mesh.scale.z);
-  mat4_t trans_m = mat4_translation(mesh.translation.x, mesh.translation.y, mesh.translation.z);
+  mat4_t rot_m_x = mat4_rotation_x(mesh.rotation.x);
+  mat4_t rot_m_y = mat4_rotation_y(mesh.rotation.y);
+  mat4_t rot_m_z = mat4_rotation_z(mesh.rotation.z);
+  mat4_t transl_m = mat4_translation(mesh.translation.x, mesh.translation.y, mesh.translation.z);
 
   uint32_t num_faces = array_length(mesh.faces);
 
@@ -144,8 +145,17 @@ void update(void) {
     for (size_t j = 0; j < 3; j++) {
       vec4_t transformed_vertex = vec4_from_vec3(face_vertices[j]);
 
-      transformed_vertex = mat4_mul_vec4(scale_m, transformed_vertex);
-      transformed_vertex = mat4_mul_vec4(trans_m, transformed_vertex);
+      // Create world matrix, combines scale, rotation, and
+      // translation matrices
+      mat4_t world_matrix = mat4_identity();
+      world_matrix = mat4_mul_mat4(scale_m, world_matrix);
+      world_matrix = mat4_mul_mat4(rot_m_x, world_matrix);
+      world_matrix = mat4_mul_mat4(rot_m_y, world_matrix);
+      world_matrix = mat4_mul_mat4(rot_m_z, world_matrix);
+      world_matrix = mat4_mul_mat4(transl_m, world_matrix);
+
+      // Multiply world matrix by OG vector
+      transformed_vertex = mat4_mul_vec4(world_matrix, transformed_vertex);
 
       transformed_vertices[j] = transformed_vertex;
     }
