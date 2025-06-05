@@ -256,11 +256,11 @@ void render(void) {
     // red vertex dots
     if (render_modes == 2) {
       draw_rectangle(current_triangle.points[0].x, current_triangle.points[0].y,
-                     3, 3, 0xFFFF0000);
+                     4, 4, 0xFFFF0000);
       draw_rectangle(current_triangle.points[1].x, current_triangle.points[1].y,
-                     3, 3, 0xFFFF0000);
+                     4, 4, 0xFFFF0000);
       draw_rectangle(current_triangle.points[2].x, current_triangle.points[2].y,
-                     3, 3, 0xFFFF0000);
+                     4, 4, 0xFFFF0000);
     }
   }
 
