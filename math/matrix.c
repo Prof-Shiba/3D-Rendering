@@ -106,3 +106,27 @@ mat4_t mat4_mul_mat4(mat4_t lhs, mat4_t rhs) {
   }
   return result;
 }
+
+mat4_t mat4_perspective(float fov, float aspect, float z_near, float z_far) {
+  mat4_t m = {{{0}}};
+
+  m.m[0][0] = aspect * (1 / tan(fov / 2));
+  m.m[1][1] = 1 / tan(fov / 2);
+  m.m[2][2] = z_far / (z_far / z_near);
+  m.m[2][3] = (-z_far * z_near) / (z_far - z_near);
+  m.m[3][2] = 1;
+  return m;
+}
+
+vec4_t mat4_mul_vec4_project(mat4_t mat_proj, vec4_t v) {
+  // mult proj matrix by our og vec
+  vec4_t result = mat4_mul_vec4(mat_proj, v);
+
+  // perform perspective divide with og z_value now stored in w
+  if (result.w != 0) {
+    result.x /= result.w;
+    result.y /= result.w;
+    result.z /= result.w;
+  }
+  return result;
+}
