@@ -1,8 +1,8 @@
+#include "../math/matrix.h"
+#include "../math/vector.h"
 #include "./array.h"
 #include "./display.h"
 #include "./mesh.h"
-#include "../math/vector.h"
-#include "../math/matrix.h"
 
 // FIXME: Currently takes 4 seconds to run the program?
 
@@ -11,12 +11,10 @@
 bool is_running = false;
 bool enable_backface_culling = true;
 uint8_t render_modes = 1;
-float fov_factor = 900; // our scalar
+mat4_t proj_matrix;
 triangle_t *triangles_to_render = NULL;
-
 uint32_t previous_frame_time = 0;
 uint32_t time_to_wait = 0;
-
 vec3_t camera_pos = {0, 0, 0};
 
 void setup(void) {
@@ -25,6 +23,13 @@ void setup(void) {
   color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
                                            SDL_TEXTUREACCESS_STREAMING,
                                            WINDOW_WIDTH, WINDOW_HEIGHT);
+
+  // init perspective projection matrix
+  float fov = 3.14159 / 3.0; // 180 / 3 (60 deg)
+  float aspect = (float)WINDOW_WIDTH / WINDOW_HEIGHT;
+  float z_near = 0.1;
+  float z_far = 100.0;
+  proj_matrix = mat4_perspective(fov, aspect, z_near, z_far);
 
   FILE *f = fopen("./assets/obj_data.txt", "r");
   if (!f) {
@@ -52,12 +57,6 @@ void setup(void) {
   // with a '\0'
   buffer[strcspn(buffer, "\n")] = 0;
   load_obj_data(buffer);
-}
-
-vec2_t project(vec3_t point) {
-  vec2_t projected_point = {(fov_factor * point.x) / point.z,
-                            (fov_factor * point.y) / point.z};
-  return projected_point;
 }
 
 void process_input(void) {
@@ -127,7 +126,8 @@ void update(void) {
   mat4_t rot_m_x = mat4_rotation_x(mesh.rotation.x);
   mat4_t rot_m_y = mat4_rotation_y(mesh.rotation.y);
   mat4_t rot_m_z = mat4_rotation_z(mesh.rotation.z);
-  mat4_t transl_m = mat4_translation(mesh.translation.x, mesh.translation.y, mesh.translation.z);
+  mat4_t transl_m = mat4_translation(mesh.translation.x, mesh.translation.y,
+                                     mesh.translation.z);
 
   uint32_t num_faces = array_length(mesh.faces);
 
@@ -182,25 +182,37 @@ void update(void) {
       if (cam_norm_dot < 0)
         continue;
     }
-    // TODO: implement a proper z-ordering system later
-    float depth = (transformed_vertices[0].z + transformed_vertices[1].z +
-                   transformed_vertices[2].z) /
-                  3;
 
-    triangle_t projected_triangle;;
+    vec4_t projected_point[3];
+
+    // FIXME: Scaling issues
 
     // loop all 3 vertices to perform projection
     for (size_t j = 0; j < 3; j++) {
       // project current vertex
-      vec2_t projected_point = project(vec3_from_vec4(transformed_vertices[j]));
+      projected_point[j] =
+          mat4_mul_vec4_project(proj_matrix, transformed_vertices[j]);
 
-      // scale and translate projected points to middle of screen
-      projected_point.x += (uint16_t)(WINDOW_WIDTH / 2);
-      projected_point.y += (uint16_t)(WINDOW_HEIGHT / 2);
+      // scale
+      projected_point[j].x *= (uint16_t)(WINDOW_WIDTH / 2);
+      projected_point[j].y *= (uint16_t)(WINDOW_HEIGHT / 2);
 
-      projected_triangle.points[j] = projected_point;
-      projected_triangle.avg_depth = depth;
+      // translate projected points to middle of screen
+      projected_point[j].x += (uint16_t)(WINDOW_WIDTH / 2);
+      projected_point[j].y += (uint16_t)(WINDOW_HEIGHT / 2);
     }
+
+    float avg_depth = (transformed_vertices[0].z + transformed_vertices[1].z +
+                       transformed_vertices[2].z / 3.0);
+
+    triangle_t projected_triangle = {
+        .points =
+            {
+                {projected_point[0].x, projected_point[0].y},
+                {projected_point[1].x, projected_point[1].y},
+                {projected_point[2].x, projected_point[2].y},
+            },
+        .avg_depth = avg_depth};
     // save the projected triangle in the array of triangles to render
     array_push(triangles_to_render, projected_triangle);
   }
